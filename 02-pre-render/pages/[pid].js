@@ -2,9 +2,9 @@ import path from 'path';
 import fs from 'fs/promises';
 
 const ProductDetailPage = ({ product }) => {
-  // if (!product) {
-  //   return <p>Loading...</p>;
-  // }
+  if (!product) {
+    return <p>Loading...</p>;
+  }
   return (
     <>
       <h1>{product.title}</h1>
@@ -29,6 +29,12 @@ export async function getStaticProps(context) {
   const productId = params.pid;
   const product = data.products.find((product) => product.id === productId);
 
+  if (!product) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       product,
@@ -52,8 +58,9 @@ export async function getStaticPaths() {
     generated JIT & not pregenerated. Example there may be instances where some of the pages are not visited often
     and it is a waste of time to prerender all the pages
     */
-    // fallback: false,
-    fallback: 'blocking',
+    // fallback: true,
+    fallback: false,
+    // fallback: 'blocking',
   };
 }
 
